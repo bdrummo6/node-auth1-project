@@ -1,5 +1,12 @@
 const db = require('../../data/dbConfig');
 
+module.exports = {
+	find,
+	findBy,
+	findById,
+	add
+}
+
 // Finds every users id and username from users table in database
 function find() {
 	return db('users').select('id', 'username');
@@ -20,12 +27,4 @@ async function add(user) {
 	const [id] = await db('users').insert(user);
 	return findById(id);
 }
-
-module.exports = {
-	find,
-	findBy,
-	findById,
-	add
-}
-
 
