@@ -51,9 +51,9 @@ router.post('/login', async (req, res, next) => {
 		}
 
 		// hash the password again and see if it matches what we have in the database
-		const passwordValid = await bcrypt.compare(password, user.password)
+		const passwordIsValid = await bcrypt.compare(password, user.password)
 
-		if (!passwordValid) {
+		if (!passwordIsValid) {
 			return res.status(401).json({
 				message: 'You shall not pass!',
 			});
