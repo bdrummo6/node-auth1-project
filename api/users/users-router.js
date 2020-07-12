@@ -1,4 +1,5 @@
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const Users = require('./users-model');
 
 const router = express.Router();
@@ -26,8 +27,9 @@ router.post('/register', async (req, res, next) => {
 
 		const newUser = await Users.add({
 			username,
-			password
+			password: await bcrypt.hash(password, 16), // hash the password with a time complexity of '16'
 		})
+
 
 		res.status(201).json(newUser);
 	} catch(err) {
