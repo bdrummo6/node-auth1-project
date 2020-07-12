@@ -38,38 +38,51 @@ router.post('/register', async (req, res, next) => {
 	}
 })
 
-// Logs in a registered user
 router.post('/login', async (req, res, next) => {
 	try {
 		const { username, password } = req.body;
 		const user = await Users.findBy({ username }).first();
 
-		// Checks if username is in the database
 		if (!user) {
 			return res.status(401).json({
-				message: 'Invalid Credentials',
-			});
+				message: "Invalid Credentials",
+			})
 		}
 
-		// Use bcrypt to hash the password again and compare the input password with the one in the database
-		const isMatch = await bcrypt.compare(password, user.password)
+		// hash the password again and see if it matches what we have in the database
+		const passwordValid = await bcrypt.compare(password, user.password)
 
-		// Checks is input password is correct
-		if (!isMatch) {
+		if (!passwordValid) {
 			return res.status(401).json({
-				message: 'Invalid Credentials',
-			});
+				message: "Invalid Credentials",
+			})
 		}
 
-		// Creates a new login session for the user and sends back a session id
+		// generate a new session for this user,
+		// and sends back a session ID
 		req.session.user = user;
 
 		res.json({
-			message: `${user.username} you logged in successfully!`,
-		});
+			message: `Welcome ${user.username}!`,
+		})
 	} catch(err) {
-		next(err);
+		next(err)
 	}
 })
+
+router.get('/logout', async (req, res, next) => {
+	try {
+		req.session.destroy((err) => {
+			if (err) {
+				next(err)
+			} else {
+				res.status(204).end()
+			}
+		})
+	} catch (err) {
+		next(err)
+	}
+})
+
 
 module.exports = router;

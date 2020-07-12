@@ -1,6 +1,5 @@
 const db = require('../../data/dbConfig');
 
-
 // Finds every users id and username from users table in database
 function find() {
 	return db('users').select('id', 'username');
@@ -11,7 +10,7 @@ function findById(id) {
 	return db('users').select('id', 'username').where({ id }).first();
 }
 
-// Finds user by specified criteria
+// Find by specified criteria
 function findBy(filter) {
 	return db('users').select('id', 'username', 'password').where(filter);
 }
