@@ -1,12 +1,12 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const Users = require('./users-model');
-const regulate = require("../../middleware/regulate");
+const restrict = require('../../middleware/restrict');
 
 const router = express.Router();
 
 // Retrieves list of users from database
-router.get('/users', regulate(), async (req, res, next) => {
+router.get('/users', restrict(), async (req, res, next) => {
 	try {
 		res.json(await Users.find());
 	} catch(err) {
@@ -38,6 +38,7 @@ router.post('/register', async (req, res, next) => {
 	}
 })
 
+// Creates new user session so user can access list of users
 router.post('/login', async (req, res, next) => {
 	try {
 		const { username, password } = req.body;
@@ -45,8 +46,8 @@ router.post('/login', async (req, res, next) => {
 
 		if (!user) {
 			return res.status(401).json({
-				message: "Invalid Credentials",
-			})
+				message: 'Invalid Credentials',
+			});
 		}
 
 		// hash the password again and see if it matches what we have in the database
@@ -54,33 +55,32 @@ router.post('/login', async (req, res, next) => {
 
 		if (!passwordValid) {
 			return res.status(401).json({
-				message: "Invalid Credentials",
-			})
+				message: 'Invalid Credentials',
+			});
 		}
 
-		// generate a new session for this user,
-		// and sends back a session ID
 		req.session.user = user;
 
 		res.json({
 			message: `Welcome ${user.username}!`,
-		})
+		});
 	} catch(err) {
-		next(err)
+		next(err);
 	}
 })
 
+// Ends user's session
 router.get('/logout', async (req, res, next) => {
 	try {
 		req.session.destroy((err) => {
 			if (err) {
-				next(err)
+				next(err);
 			} else {
-				res.status(204).end()
+				res.status(204).end();
 			}
 		})
 	} catch (err) {
-		next(err)
+		next(err);
 	}
 })
 
