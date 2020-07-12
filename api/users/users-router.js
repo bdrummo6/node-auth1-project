@@ -46,7 +46,7 @@ router.post('/login', async (req, res, next) => {
 
 		if (!user) {
 			return res.status(401).json({
-				message: 'Invalid Credentials',
+				message: 'You shall not pass!',
 			});
 		}
 
@@ -55,14 +55,14 @@ router.post('/login', async (req, res, next) => {
 
 		if (!passwordValid) {
 			return res.status(401).json({
-				message: 'Invalid Credentials',
+				message: 'You shall not pass!',
 			});
 		}
 
 		req.session.user = user;
 
 		res.json({
-			message: `Welcome ${user.username}!`,
+			message: `${user.username} is logged in!`,
 		});
 	} catch(err) {
 		next(err);
