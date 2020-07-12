@@ -4,6 +4,7 @@ const cors = require('cors');
 const session = require('express-session');
 const KnexSessionStore = require('connect-session-knex')(session);
 const db = require('./data/dbConfig');
+
 const welcomeRouter = require('./api/welcome/welcome-router');
 const usersRouter = require('./api/users/users-router');
 
@@ -13,6 +14,7 @@ const port = process.env.PORT || 8000;
 server.use(helmet());
 server.use(cors());
 server.use(express.json());
+
 server.use(session({
 	resave: false, // avoids recreating sessions that have not changed
 	saveUninitialized: false,
@@ -30,7 +32,7 @@ server.use((err, req, res, next) => {
 	console.log(err);
 
 	res.status(500).json({
-		message: 'Something went wrong',
+		message: 'Something went wrong!',
 	});
 })
 
