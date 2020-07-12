@@ -10,8 +10,7 @@ function restrict() {
 			if (!req.session || !req.session.user) {
 				return res.status(401).json(error);
 			}
-
-			// if we reach this point, the user is considered authorized!
+			
 			next();
 		} catch (err) {
 			next(err);
