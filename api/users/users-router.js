@@ -6,7 +6,7 @@ const router = express.Router();
 // Retrieves list of users from database
 router.get('/users', async (req, res, next) => {
 	try {
-		res.json(await Users.get());
+		res.json(await Users.find());
 	} catch(err) {
 		next(err);
 	}
